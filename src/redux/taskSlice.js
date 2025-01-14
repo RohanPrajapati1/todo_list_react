@@ -13,17 +13,29 @@ export const taskSlice = createSlice({
   reducers: {
     createTask: (state , action) => {
       const task = action.payload;
-      if(task === ''){
-
-      }
-      else {
+      console.log(action.payload)
+      if(action.payload.content){
         state.tasks.push(task);
         localStorage.setItem("tasks" ,
           JSON.stringify(state.tasks)
         );
         toast.success("task created successfully")
       }
-     
+
+      
+    },
+    updateTask: (state , action) => {
+      const {index,value}=action.payload  
+
+    state.tasks[index]={id:Date,content:value}
+
+      if(action.payload.content){
+        localStorage.setItem("tasks" ,
+          JSON.stringify(state.tasks)
+        );
+        toast.success("task created successfully")
+      }
+
       
     },
     deleteTask: (state , action) => {
@@ -44,14 +56,13 @@ export const taskSlice = createSlice({
       }
       
     },
-    // incrementByAmount: (state, action) => {
-    //   state.tasks += action.payload
-    //   // console.log(object)
+    // updateTask(state, action){
+      
     // },
   },
 })
 
 // Action creators are generated for each case reducer function
-export const { createTask, deleteTask } = taskSlice.actions
+export const { createTask, deleteTask ,updateTask } = taskSlice.actions
 
 export default taskSlice.reducer

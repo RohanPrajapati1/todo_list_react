@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 // import { useSearchParams } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux'
-import { createTask, deleteTask } from '../redux/taskSlice';
+import { createTask, deleteTask, updateTask } from '../redux/taskSlice';
 import '@fortawesome/fontawesome-free/css/all.min.css';
 
 
@@ -11,22 +11,39 @@ const Home = () => {
   const [value, setValue] = useState("");
   // const [searchParams , setSearchParams] = useSearchParams();
   // const taskId = searchParams.get("taskId");
+  const [update, setUpdate] = useState(0);
   const dispatch = useDispatch();
+  const [taskList, setTaskList] = useState([])
+  const [indexToChange, setIndexToChange] = useState(null)
   const allTasks = useSelector((state) =>
     state.task.tasks);
+  console.log(allTasks)
 
   function handleCreate() {
+
     const task = {
       content: value,
       _id: Date.now().toString(36),
     }
-    dispatch(createTask(task));
+    if (indexToChange != null) {
+      dispatch(updateTask({ index: indexToChange, value }))
+      setIndexToChange(null);
+    } else {
+
+      dispatch(createTask(task));
+    }
     setValue('');
   }
 
   function handleDelete(taskId) {
     // console.log(taskId);
     dispatch(deleteTask(taskId));
+  }
+
+  function updateTasks(value) {
+    setValue(value);
+    // setUpdate(1);
+    //  dispatch(updateTask(indexToChange , value));
   }
 
 
@@ -50,7 +67,7 @@ const Home = () => {
             className='py-1 px-4 rounded-md bg-cyan-400 drop-shadow-lg hover:bg-cyan-500'
             onClick={handleCreate}
           >
-            List task
+            {indexToChange != null ? 'update task' : 'List task'}
           </button>
         </div>
 
@@ -58,7 +75,7 @@ const Home = () => {
           {
             allTasks.length > 0 &&
             allTasks.map(
-              (task) => {
+              (task, index) => {
                 return (
                   <div className='border rounded-sm px-2 flex justify-between items-center gap-2'>
                     {/* <input type="checkbox"/> */}
@@ -66,11 +83,25 @@ const Home = () => {
                       className='text-lg font-serif'>
                       {task.content}
                     </p>
-                    <button
-                      onClick={() => handleDelete(task?._id)}
+
+                    <div
+                      className='flex gap-4'>
+
+                      <button
+                        onClick={() => {
+                          updateTasks(task.content)
+                          setIndexToChange(index)
+                        }}>
+                        edit
+                      </button>
+
+
+                      <button
+                        onClick={() => handleDelete(task?._id)}
                       >
-                      <i class="fa-solid fa-trash"></i>
-                    </button>
+                        <i className="fa-solid fa-trash"></i>
+                      </button>
+                    </div>
                   </div>
                 )
               }
