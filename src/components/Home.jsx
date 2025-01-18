@@ -1,4 +1,5 @@
-import React, { useState } from "react";
+import React, { useRef, useState } from "react";
+import "../components/home.css";
 import { useDispatch, useSelector } from "react-redux";
 import {
   createTask,
@@ -13,12 +14,10 @@ const Home = () => {
   const [subTask, setSubTask] = useState("");
   const [taskDate, setTaskDate] = useState(null);
   const [taskStatus, setTaskStatus] = useState("pending");
-  // const [done, setDone] = useState(false);
   const dispatch = useDispatch();
-  // const [taskList, setTaskList] = useState([])
+
   const [indexToChange, setIndexToChange] = useState(null);
   const allTasks = useSelector((state) => state.task.tasks);
-  console.log(allTasks);
 
   function handleCreate() {
     const task = {
@@ -63,13 +62,16 @@ const Home = () => {
   const statusarr = ["pending", "inProgress", "completed"];
 
   return (
-    <div>
-      <div className="min-w-[850px] max-screen flex flex-col gap-4 justify-center items-center border bg-emerald-300 pb-2  rounded-2xl">
-        <h1 className="text-2xl font-serif font-medium">TODO App</h1>
-        <div className="flex justify-evenly w-[80%] border p-2">
-          <form action="" className="flex flex-col gap-2 w-[100%]">
+    <div className=" w-full  ">
+      <div className="   sm:mx-auto  border  p-2  rounded-2xl ">
+        
+        <div className=" max-w-2xl mx-auto ">
+          <h1 className="text-xl font-serif font-medium text-black">
+            TODO App
+          </h1>
+          <div className="  border rounded-lg p-2">
             <input
-              className="px-2 py-1 border border-gray-400 text-slate-500 rounded-md drop-shadow-lg w-[100%]"
+              className="px-2 py-1 border border-gray-400 text-slate-500 rounded-md drop-shadow-lg w-full"
               placeholder="Title of Task..."
               type="text"
               value={value}
@@ -81,17 +83,17 @@ const Home = () => {
               id=""
               placeholder="Enter Tasks"
               minLength={20}
-              className="rounded-md p-2"
+              className="border border-gray-400 drop-shadow-lg rounded-md p-2"
               value={subTask}
               onChange={(e) => setSubTask(e.target.value)}
             ></textarea>
 
-            <div className="flex justify-between items-center">
-              <label htmlFor="date">Task date</label>
+            <div className="">
+              <label htmlFor="date">Task date</label> <br/>
               <input
                 type="date"
                 id="date"
-                className="rounded-md px-2 py-1 drop-shadow-lg w-[60%]"
+                className="rounded-md px-2 py-1 drop-shadow-lg "
                 value={taskDate}
                 onChange={(e) => {
                   setTaskDate(e.target.value);
@@ -106,26 +108,34 @@ const Home = () => {
             >
               {indexToChange != null ? "update task" : "List task"}
             </button>
-          </form>
+          </div>
         </div>
 
-        <div className="min-w-[80%] p-5 rounded-sm border flex flex-col gap-5 overflow-y-scroll">
-          <div className="flex justify-evenly gap-20 text-lg text-cyan-800 bg-cyan-600 ">
+        <div  className=" rounded-sm border overflow-y-scroll mt-4">
+          <div
+            id="list-container"
+            className="flex flex-col sm:flex-row justify-center  text-lg text-cyan-800 "
+          >
             {statusarr.map((it, ind) => (
-              <div key={ind} className=" min-w-[350px] max-w-[400px] ">
+              <div
+                id="status-container"
+                key={ind}
+                className=" min-w-[300px] max-w-[400px] flex flex-col gap-3 bg-red-100 p-2 "
+              >
                 <h1>{it}</h1>
                 {/* {console.log('ddd',allTasks.filter(it => it.status == it))} */}
                 {allTasks
                   .filter((ite) => ite.status == it)
                   .map((task, index) => (
                     <div
+                      id="task-container"
                       key={index}
-                      className="w-full border rounded-sm p-2 flex flex-col justify-between items-center gap-3 h-[200px] bg-white text-black"
+                      className=" border border-sky-300 rounded-lg p-4  min-h-[150px] bg-white text-black "
                     >
                       <select
                         name="status"
                         id=""
-                        className="bg-inherit"
+                        className=" text-lg border p-2 rounded-md w-full"
                         onChange={(e) => handleUpdateTask(e.target.value, task)}
                       >
                         {statusarr.map((it) => (
@@ -134,20 +144,27 @@ const Home = () => {
                           </option>
                         ))}
                       </select>
-                      <div>
-                        <p className="text-lg font-serif underline underline-offset-1">
+
+               
+
+                        <p className=" text-lg font-sans capitalize">
                           {task.content}
                         </p>
-                        <p>{task.subTask}</p>
-                        <p className="font-light">{task.date}</p>
-                      </div>
+                        <p className="text-gray-600 text-sm font-sans">
+                          {task.subTask}
+                        </p>
+                    <div className=" flex item-center justify-between mt-2">
 
-                      <div className="flex flex-row justify-between gap-8 ">
+                      <p className="font-light ">
+                        {task.date}
+                      </p>
+                      <div className="flex item-center gap-x-2">
                         <button
                           onClick={() => {
                             updateTasks(task.content, task.date, task.subTask);
                             setIndexToChange(index);
                           }}
+                          className=""
                         >
                           edit
                         </button>
@@ -156,6 +173,8 @@ const Home = () => {
                           <i className="fa-solid fa-trash"></i>
                         </button>
                       </div>
+                    </div>
+                
                     </div>
                   ))}
               </div>

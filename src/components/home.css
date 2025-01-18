@@ -1,0 +1,17 @@
+/* #main-container{
+
+}
+@media screen and () {
+    #main-container{
+       max-width: 80%;
+        overflow-x: hidden;
+        background: ;
+    }
+    #task-add-container{
+        width: 100px
+    }
+    #task-add-container form{
+        width: 80%;
+    }
+
+} */
