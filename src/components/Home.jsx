@@ -8,20 +8,21 @@ import {
   updateTaskStatus,
 } from "../redux/taskSlice";
 import "@fortawesome/fontawesome-free/css/all.min.css";
+import { NavLink } from "react-router";
 
 const Home = () => {
   // const [value, setValue] = useState("");
   // const [subTask, setSubTask] = useState("");
   // const [taskDate, setTaskDate] = useState(null);
-  const [taskStatus, setTaskStatus] = useState("pending");
+  // const [taskStatus, setTaskStatus] = useState("pending");
   const dispatch = useDispatch();
   const dragItem = useRef();
   const dragContainer = useRef();
   const dragItemIndex = useRef();
-  const [isEdit,setIsEdit]=useState(false)
-  const [dataToEdit,setDataToEdit]=useState({})
+  // const [isEdit,setIsEdit]=useState(false)
+  // const [dataToEdit,setDataToEdit]=useState({})
   // const [indexToChange, setIndexToChange] = useState(null);
-  const [idToChange , setIdToChange] = useState(null);
+  const [idToChange, setIdToChange] = useState(null);
   // const allTasks = useSelector((state) => state.task.tasks);
 
   const [collecteddata, setCollectedData] = useState({
@@ -33,35 +34,26 @@ const Home = () => {
   const [allTasks1, setAllTasks] = useState([]);
 
   function addTask() {
-    if(idToChange){
-      // let arr = allTasks1.map((item, ind) => {
-      //   if (id == item.id) {
-      //     return Object.assign(item, params);
-      //   }        
-      // });
-      const index = allTasks1.findIndex((item) => 
-        item.id == idToChange
-      )
-      console.log('ddd--',idToChange, index,allTasks1)
-      if(index==-1)
-        return
-      let arr=allTasks1
-      arr[index] = {name:collecteddata.name,dueDate:collecteddata.dueDate ,description:collecteddata.description ,id:idToChange , status:"pending"}
-
-      // allTasks1[index].name = collecteddata.name;
-      // allTasks1[index].dueDate = collecteddata.dueDate
-      // allTasks1[index].description = collecteddata.description;
+    if (idToChange) {
+      const index = allTasks1.findIndex((item) => item.id == idToChange);
+      if (index == -1) return;
+      let arr = allTasks1;
+      arr[index] = {
+        name: collecteddata.name,
+        dueDate: collecteddata.dueDate,
+        description: collecteddata.description,
+        id: idToChange,
+        status: "pending",
+      };
       localStorage.setItem("data", JSON.stringify(arr));
-      setAllTasks(arr)
+      setAllTasks(arr);
       setIdToChange(null);
-    }
-    else{
+    } else {
       collecteddata.id = Date.now();
       let arr = [...allTasks1, collecteddata];
       localStorage.setItem("data", JSON.stringify(arr));
       setAllTasks((pre) => [...pre, collecteddata]);
     }
-   
   }
 
   useEffect(() => {
@@ -73,17 +65,16 @@ const Home = () => {
   async function updateTask(id, params) {
     let arr = allTasks1.map((item, ind) => {
       if (id == item.id) {
-        return Object.assign(item, {status:params});
+        return Object.assign(item, { status: params });
       }
     });
-    console.log(arr)
-    setAllTasks(arr);
-    console.log(allTasks1)
+    localStorage.setItem("data", JSON.stringify(allTasks1));
   }
 
   function deleteTask(id) {
     const arr = allTasks1.filter((it) => it.id != id);
     setAllTasks(arr);
+    localStorage.setItem('data' , JSON.stringify(arr))
   }
 
   // function handleCreate() {
@@ -117,7 +108,7 @@ const Home = () => {
     dispatch(deleteTask(taskId));
   }
 
-  function updateTasks(value, date, subTask , id) {
+  function updateTasks(value, date, subTask, id) {
     setCollectedData({ name: value, dueDate: date, description: subTask });
     setIdToChange(id);
   }
@@ -173,7 +164,7 @@ const Home = () => {
           <h1 className="text-xl font-serif font-medium text-black">
             TODO App
           </h1>
-          <div className="  border rounded-lg p-2">
+          {/* <div className="  border rounded-lg p-2">
             <input
               className="px-2 py-1 border border-gray-400 text-slate-500 rounded-md drop-shadow-lg w-full"
               placeholder="Title of Task..."
@@ -212,7 +203,7 @@ const Home = () => {
             >
               {idToChange != null ? "update task" : "List task"}
             </button>
-          </div>
+          </div> */}
         </div>
 
         <div className=" rounded-sm border overflow-y-scroll mt-4">
@@ -245,9 +236,11 @@ const Home = () => {
                         name="status"
                         id=""
                         className=" text-lg border p-2 rounded-md w-full"
-                        onChange={(e) => updateTask(task.id , e.target.value)}
+                        onChange={(e) => updateTask(task.id, e.target.value)}
                       >
-                        {/* <option  disabled selected>Status</option> */}
+                        <option disabled selected>
+                          Status
+                        </option>
                         {statusarr.map((it) => (
                           <option key={it} value={it}>
                             {it}
@@ -256,26 +249,26 @@ const Home = () => {
                       </select>
 
                       <p className=" text-lg font-sans capitalize">
-                        {task.name}
+                        {task.title}
                       </p>
                       <p className="text-gray-600 text-sm font-sans">
-                        {task.description}
+                        
                       </p>
                       <div className=" flex item-center justify-between mt-2">
                         <p className="font-light ">{task.dueDate}</p>
                         <div className="flex item-center gap-x-2">
                           <button
-                            onClick={() => {
-                              updateTasks(
-                                task.name,
-                                task.dueDate,
-                                task.description,
-                                task.id
-                              );
-                              
-                            }}
+                          // onClick={() => {
+                          //   updateTasks(
+                          //     task.name,
+                          //     task.dueDate,
+                          //     task.description,
+                          //     task.id
+                          //   );
+
+                          // }}
                           >
-                            edit
+                            <a href={`/${task.id}`}>view</a>
                           </button>
 
                           <button onClick={() => deleteTask(task.id)}>
