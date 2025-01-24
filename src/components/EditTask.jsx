@@ -1,10 +1,13 @@
 import React, { useEffect, useState } from "react";
-import { useParams } from "react-router";
+import {  useNavigate, useParams } from "react-router";
+import { toast } from "react-toastify";
+// import { useNavigate } from "react-router";
 
 const EditTask = () => {
   const { id } = useParams();
   const [allTask, setAllTasks] = useState([]);
   const [task, setTask] = useState(null);
+  
   const [data, setData] = useState({
     title: "",
     description: "",
@@ -18,6 +21,7 @@ const EditTask = () => {
     city: "",
     state: "",
   });
+  const navigate = useNavigate();
 
   useEffect(() => {
     const dd = localStorage.getItem("data");
@@ -54,6 +58,9 @@ const EditTask = () => {
     if (taskIndex !== -1) {
       tasks[taskIndex] = { ...tasks[taskIndex], ...data };
       localStorage.setItem("data", JSON.stringify(tasks));
+      toast.success("Task updated");
+      navigate('/');
+      
     } else {
       console.error("Task not found in local storage!");
     }

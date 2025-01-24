@@ -13,7 +13,8 @@ const Navbar = () => {
         
         <NavLink
         to='/createTask'
-        className={'text-black text-xl'} >
+        className={'text-black text-xl'} 
+        >
             Create ToDo
         </NavLink>
 

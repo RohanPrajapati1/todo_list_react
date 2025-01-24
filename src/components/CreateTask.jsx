@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { useLocation, useNavigate } from "react-router";
 // import { PhotoIcon, UserCircleIcon } from '@heroicons/react/24/solid'
 
 const CreateTask = () => {
@@ -17,6 +18,8 @@ const CreateTask = () => {
     status: "pending",
   });
   const[allTasks , setAllTasks] = useState([]);
+  const navigate = useNavigate();
+  const locatoin = useLocation();
 
   useEffect(() => {
     let dd = localStorage.getItem("data");
@@ -29,6 +32,8 @@ const CreateTask = () => {
     let arr = [...allTasks, data];
     localStorage.setItem("data", JSON.stringify(arr));
     setAllTasks((pre) => [...pre, data]);
+    navigate('/');
+
   }
 
   function hanldleChangeValue(e) {

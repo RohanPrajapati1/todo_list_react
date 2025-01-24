@@ -8,7 +8,6 @@ import {
   updateTaskStatus,
 } from "../redux/taskSlice";
 import "@fortawesome/fontawesome-free/css/all.min.css";
-import { NavLink } from "react-router";
 
 const Home = () => {
   // const [value, setValue] = useState("");
@@ -33,28 +32,28 @@ const Home = () => {
   });
   const [allTasks1, setAllTasks] = useState([]);
 
-  function addTask() {
-    if (idToChange) {
-      const index = allTasks1.findIndex((item) => item.id == idToChange);
-      if (index == -1) return;
-      let arr = allTasks1;
-      arr[index] = {
-        name: collecteddata.name,
-        dueDate: collecteddata.dueDate,
-        description: collecteddata.description,
-        id: idToChange,
-        status: "pending",
-      };
-      localStorage.setItem("data", JSON.stringify(arr));
-      setAllTasks(arr);
-      setIdToChange(null);
-    } else {
-      collecteddata.id = Date.now();
-      let arr = [...allTasks1, collecteddata];
-      localStorage.setItem("data", JSON.stringify(arr));
-      setAllTasks((pre) => [...pre, collecteddata]);
-    }
-  }
+  // function addTask() {
+  //   if (idToChange) {
+  //     const index = allTasks1.findIndex((item) => item.id == idToChange);
+  //     if (index == -1) return;
+  //     let arr = allTasks1;
+  //     arr[index] = {
+  //       name: collecteddata.name,
+  //       dueDate: collecteddata.dueDate,
+  //       description: collecteddata.description,
+  //       id: idToChange,
+  //       status: "pending",
+  //     };
+  //     localStorage.setItem("data", JSON.stringify(arr));
+  //     setAllTasks(arr);
+  //     setIdToChange(null);
+  //   } else {
+  //     collecteddata.id = Date.now();
+  //     let arr = [...allTasks1, collecteddata];
+  //     localStorage.setItem("data", JSON.stringify(arr));
+  //     setAllTasks((pre) => [...pre, collecteddata]);
+  //   }
+  // }
 
   useEffect(() => {
     let dd = localStorage.getItem("data");
@@ -104,14 +103,14 @@ const Home = () => {
   //   setSubTask("");
   // }
 
-  function handleDelete(taskId) {
-    dispatch(deleteTask(taskId));
-  }
+  // function handleDelete(taskId) {
+  //   dispatch(deleteTask(taskId));
+  // }
 
-  function updateTasks(value, date, subTask, id) {
-    setCollectedData({ name: value, dueDate: date, description: subTask });
-    setIdToChange(id);
-  }
+  // function updateTasks(value, date, subTask, id) {
+  //   setCollectedData({ name: value, dueDate: date, description: subTask });
+  //   setIdToChange(id);
+  // }
 
   function handleUpdateTask(value, item) {
     // console.log(value)
@@ -149,20 +148,20 @@ const Home = () => {
     e.preventDefault();
   };
 
-  function handleInputCahne(e) {
-    setCollectedData((pre) => {
-      return { ...pre, [e.target.name]: e.target.value };
-    });
-  }
+  // function handleInputCahne(e) {
+  //   setCollectedData((pre) => {
+  //     return { ...pre, [e.target.name]: e.target.value };
+  //   });
+  // }
 
   const statusarr = ["pending", "inProgress", "completed"];
 
   return (
     <div className=" w-full  ">
       <div className="   sm:mx-auto  border  p-2  rounded-2xl ">
-        <div className=" max-w-2xl mx-auto ">
-          <h1 className="text-xl font-serif font-medium text-black">
-            TODO App
+        <div className=" max-w-2xl mx-auto mt-8 ">
+          <h1 className="text-xl font-serif font-medium text-black text-center">
+          Your list 
           </h1>
           {/* <div className="  border rounded-lg p-2">
             <input
@@ -268,7 +267,8 @@ const Home = () => {
 
                           // }}
                           >
-                            <a href={`/${task.id}`}>view</a>
+                            <a href={`/${task.id}`}
+                            className="">detail</a>
                           </button>
 
                           <button onClick={() => deleteTask(task.id)}>
